@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Happy New Year 🎆</title>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      body {
+        min-height: 100vh;
+        background: radial-gradient(circle at top, #1c1f2b, #0b0d14 70%);
+        color: #f5f7fa;
+        display: flex;
+        justify-content: center;
+        text-align: center;
+        position: relative;
+        overflow-y: auto;
+      }
+
+      canvas {
+        position: fixed;
+        inset: 0;
+        z-index: -1;
+        display: none;
+      }
+
+      .container {
+        max-width: 900px;
+        padding: 40px 20px;
+        margin: auto;
+        animation: fadeIn 2s ease-in-out;
+      }
+
+      h1 {
+        font-size: 3rem;
+        margin-bottom: 10px;
+      }
+
+      h2 {
+        font-size: 1.5rem;
+        color: #aab0c6;
+        margin-bottom: 20px;
+      }
+
+      .countdown {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin: 30px 0;
+        flex-wrap: wrap;
+      }
+
+      .time-box {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 15px 20px;
+        border-radius: 12px;
+        min-width: 90px;
+      }
+
+      .time-box span {
+        font-size: 2rem;
+        font-weight: bold;
+      }
+
+      #customMessage {
+        display: none;
+        font-size: 1.3rem;
+        margin-top: 30px;
+      }
+
+      .btn {
+        display: none;
+        padding: 14px 34px;
+        background: linear-gradient(135deg, #3b82f6, #2563eb);
+        color: #fff;
+        border-radius: 40px;
+        cursor: pointer;
+        border: none;
+        margin-top: 20px;
+      }
+
+      .dedication {
+        margin-top: 20px;
+        font-style: italic;
+        color: #ffb6c1;
+      }
+
+      .music-btn {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        padding: 12px 18px;
+        border-radius: 30px;
+        background: rgba(0, 0, 0, 0.6);
+        color: #fff;
+        border: none;
+        cursor: pointer;
+      }
+
+      /* MODAL */
+      .modal {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.7);
+        z-index: 10;
+      }
+
+      .modal-content {
+        background: #1c1f2b;
+        margin: 5vh auto;
+        padding: 30px;
+        border-radius: 20px;
+        max-width: 520px;
+        max-height: 90vh;
+        overflow-y: scroll; /* changed from auto to scroll */
+        scrollbar-width: thin; /* For Firefox */
+        scrollbar-color: #888 #1c1f2b; /* thumb color / track color */
+        text-align: left;
+        position: relative;
+      }
+
+      /* For Webkit browsers (Chrome, Safari) */
+      .modal-content::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      .modal-content::-webkit-scrollbar-track {
+        background: #1c1f2b;
+        border-radius: 10px;
+      }
+
+      .modal-content::-webkit-scrollbar-thumb {
+        background-color: #888;
+        border-radius: 10px;
+        border: 2px solid #1c1f2b;
+      }
+
+      .modal-header {
+        font-size: 1.4rem;
+        margin-bottom: 15px;
+        border-bottom: 1px solid #444;
+        padding-bottom: 5px;
+      }
+
+      .modal-body p {
+        margin-bottom: 15px;
+        line-height: 1.7;
+      }
+
+      .close-btn {
+        position: sticky;
+        top: 0;
+        float: right;
+        background: #ff4d4d;
+        color: #fff;
+        border: none;
+        padding: 8px 18px;
+        border-radius: 30px;
+        cursor: pointer;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <canvas id="fireworksCanvas"></canvas>
+
+    <div class="container">
+      <h1>🎉 Happy New Year 2026 🎉</h1>
+      <h2>New Beginnings · New Life · New Memories</h2>
+
+      <div class="countdown">
+        <div class="time-box"><span id="days">0</span><small>Days</small></div>
+        <div class="time-box">
+          <span id="hours">0</span><small>Hours</small>
+        </div>
+        <div class="time-box">
+          <span id="minutes">0</span><small>Minutes</small>
+        </div>
+        <div class="time-box">
+          <span id="seconds">0</span><small>Seconds</small>
+        </div>
+      </div>
+
+      <!-- Restored custom message -->
+      <p id="customMessage">
+        Happy New Year 2026.<br />
+        Wishing you clarity, growth, and meaningful success.<br />
+        May your goals turn into achievements.
+      </p>
+
+      <button class="btn" id="openModalBtn">📧 View Message</button>
+      <div class="dedication">From Jomarie ❤️</div>
+    </div>
+
+    <!-- MODAL -->
+    <div id="myModal" class="modal">
+      <div class="modal-content">
+        <button class="close-btn" id="closeModalBtn">Close</button>
+        <div class="modal-header">📩 New Year Message</div>
+
+        <div class="modal-body">
+          <p><strong>Merry Christmas and Happy New Year, April.</strong></p>
+          <p>
+            As this year comes to an end, I just want to tell you how deeply
+            grateful I am for you. Knowing that I have someone like you in my
+            life is something I’m truly proud of. You are my greatest love, and
+            I hope you know how much you mean to me.
+          </p>
+          <p>
+            You’ve helped me in more ways than you probably realize simply by
+            being by my side. You supported me, believed in me, and helped me
+            see the parts of myself that needed to change.
+          </p>
+          <p>
+            I know I can be stubborn, emotionally unaware, distant, and often
+            filled with negativity. Yet despite all of that, you still tried,
+            tried to understand me, cared for me, stood by me, and loved me
+            wholeheartedly.
+          </p>
+          <p>
+            Because of you, I’m striving to become the best version of myself. I
+            want to grow, mature, succeed, be more empathetic, and become a
+            better person overall. And honestly, the reason behind all of that
+            is you.
+          </p>
+          <p>
+            I don’t even know how to repay you for everything you’ve given me.
+            Sometimes I’m still shocked by how much I’ve changed, just from
+            meeting you. My life shifted in ways I never expected.
+          </p>
+          <p>
+            I love you, and I’m sorry. I’m sorry that you met me at my worst.
+            I’m sorry for every mistake I’ve made. There’s one mistake in
+            particular that stays in my mind something I truly regret and still
+            struggle to forgive myself for.
+          </p>
+          <p>
+            Over time, you’ve become someone I deeply respect, love, admire, and
+            feel endlessly grateful for. Thank you for everything.
+          </p>
+          <p>
+            The memories we’ve shared are some of the most meaningful moments of
+            my life, and nothing can ever replace them. This chapter with you is
+            one of the most beautiful chapters I’ve ever had, and it’s one I
+            never want to end.
+          </p>
+          <p>
+            Oh, it’s New Year! I hope this year brings you happiness and lots of
+            wonderful memories with your friends. I know life isn’t always full
+            of happy days, so if you ever find yourself in a difficult
+            situation, I want to remind you to be brave, face it without fear,
+            and have faith in God.
+          </p>
+          <p>
+            I also want you to know that if you ever need my help, don’t
+            hesitate to ask. Thank you, and good luck on your journey! May God
+            guide and bless you. Once again, Happy New Year!
+          </p>
+          <p><strong>Thank you for the memories.</strong></p>
+        </div>
+      </div>
+    </div>
+
+    <audio id="bgMusic" loop>
+      <source src="new_year.mp3" type="audio/mpeg" />
+    </audio>
+
+    <button class="music-btn" onclick="toggleMusic()">🎵 Music</button>
+
+    <script>
+      const newYear = new Date("January 1, 2026 00:00:00").getTime();
+      const openModalBtn = document.getElementById("openModalBtn");
+      const customMessage = document.getElementById("customMessage");
+      const fireworksCanvas = document.getElementById("fireworksCanvas");
+      const days = document.getElementById("days");
+      const hours = document.getElementById("hours");
+      const minutes = document.getElementById("minutes");
+      const seconds = document.getElementById("seconds");
+      const myModal = document.getElementById("myModal");
+      const closeModalBtn = document.getElementById("closeModalBtn");
+      const bgMusic = document.getElementById("bgMusic");
+
+      const timer = setInterval(() => {
+        const diff = newYear - Date.now();
+
+        if (diff <= 0) {
+          clearInterval(timer);
+          days.textContent =
+            hours.textContent =
+            minutes.textContent =
+            seconds.textContent =
+              0;
+
+          openModalBtn.style.display = "inline-block";
+          fireworksCanvas.style.display = "block";
+          customMessage.style.display = "block"; // Show the message
+          startFireworks();
+          return;
+        }
+
+        days.textContent = Math.floor(diff / 86400000);
+        hours.textContent = Math.floor((diff / 3600000) % 24);
+        minutes.textContent = Math.floor((diff / 60000) % 60);
+        seconds.textContent = Math.floor((diff / 1000) % 60);
+      }, 1000);
+
+      openModalBtn.onclick = () => (myModal.style.display = "block");
+      closeModalBtn.onclick = () => (myModal.style.display = "none");
+
+      let playing = false;
+      function toggleMusic() {
+        playing ? bgMusic.pause() : bgMusic.play();
+        playing = !playing;
+      }
+
+      const canvas = fireworksCanvas;
+      const ctx = canvas.getContext("2d");
+      canvas.width = innerWidth;
+      canvas.height = innerHeight;
+
+      class Particle {
+        constructor(x, y, c) {
+          this.x = x;
+          this.y = y;
+          this.c = c;
+          this.a = Math.random() * Math.PI * 2;
+          this.s = Math.random() * 6 + 2;
+          this.o = 1;
+        }
+        update() {
+          this.x += Math.cos(this.a) * this.s;
+          this.y += Math.sin(this.a) * this.s;
+          this.o -= 0.02;
+        }
+        draw() {
+          ctx.globalAlpha = this.o;
+          ctx.fillStyle = this.c;
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, 2, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+
+      let parts = [];
+      function boom() {
+        const x = Math.random() * canvas.width;
+        const y = Math.random() * canvas.height * 0.5;
+        const colors = ["#ff4d4d", "#ffd700", "#4da6ff"];
+        for (let i = 0; i < 100; i++)
+          parts.push(new Particle(x, y, colors[i % 3]));
+      }
+
+      function animate() {
+        ctx.fillStyle = "rgba(0,0,0,.2)";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        parts = parts.filter((p) => p.o > 0);
+        parts.forEach((p) => {
+          p.update();
+          p.draw();
+        });
+        requestAnimationFrame(animate);
+      }
+
+      function startFireworks() {
+        animate();
+        setInterval(boom, 800);
+      }
+    </script>
+  </body>
+</html>
